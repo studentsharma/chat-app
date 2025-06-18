@@ -24,9 +24,9 @@ app.use(cookieParser());
 const server = http.createServer(app);
 socketHandler(server)
 
-// app.get("/", (req, res) => {
-//     res.send("working");
-// })
+app.get("/", (req, res) => {
+    res.send("working");
+})
 
 app.use("/main", userroute)
 // app.use("/messages", protect ,messageroute)
