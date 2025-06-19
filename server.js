@@ -13,27 +13,12 @@ dotenv.config();
 
 const app = express();
 
-// app.use(cors({
-//   origin: "https://chat-frontend-eypj.onrender.com", 
-//   credentials: true 
-// }));
-
 app.use(cors({
-  origin: "https://chat-frontend-eypj.onrender.com",
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
-  optionsSuccessStatus: 200
+  origin: "https://chat-frontend-eypj.onrender.com", 
+  origin: "https://localhost:5173", 
+  credentials: true 
 }));
 
-// Add this RIGHT AFTER the cors middleware:
-app.options('*', cors({
-  origin: "https://chat-frontend-eypj.onrender.com",
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
-  optionsSuccessStatus: 200
-}));
 
 app.use(express.json());
 app.use(cookieParser());
