@@ -42,6 +42,7 @@ const createUser = async (req, res) => {
             sameSite: "None",
             secure: true,
             maxAge: 10 * 60 * 1000,
+            path: "/",
         });
 
         return res.status(201).json(newUser);
@@ -68,6 +69,7 @@ const login = async (req, res) => {
             sameSite: "None", 
             secure: true,       
             maxAge: 10 * 60 * 1000,
+            path: "/",
         });
         res.status(200).json({ user, token });
 
