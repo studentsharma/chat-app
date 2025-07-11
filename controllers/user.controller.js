@@ -43,7 +43,6 @@ const createUser = async (req, res) => {
             secure: true,
             maxAge: 10 * 60 * 1000,
             path: "/",
-            domain: '.onrender.com',
         });
 
         return res.status(201).json(newUser);
@@ -71,7 +70,6 @@ const login = async (req, res) => {
             secure: true,       
             maxAge: 10 * 60 * 1000,
             path: "/",
-            domain: '.onrender.com',
         });
         res.status(200).json({ user, token });
 
@@ -101,7 +99,6 @@ const logout = (req, res) => {
     httpOnly: true,
     sameSite: "None",
     secure: true, 
-    domain: '.onrender.com',
   });
   res.status(200).json({ message: "Logged out successfully" });
 };
