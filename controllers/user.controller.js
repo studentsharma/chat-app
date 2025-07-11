@@ -39,7 +39,9 @@ const createUser = async (req, res) => {
         const token = jwt.sign({ id: newUser._id, username }, process.env.JWT_SECRET, { expiresIn: "10m" });
         res.cookie("token", token, {
             httpOnly: true,
-            maxAge: 24 * 60 * 60 * 1000,
+            sameSite: "None",
+            secure: true
+            maxAge: 10 * 60 * 1000,
         });
 
         return res.status(201).json(newUser);
@@ -93,6 +95,7 @@ const getUsers = async (req, res) => {
 const logout = (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
+    sameSite: "None",
     secure: true, 
   });
   res.status(200).json({ message: "Logged out successfully" });
