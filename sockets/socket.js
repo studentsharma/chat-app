@@ -11,7 +11,7 @@ const socketHandler = (server) => {
     });
 
     io.on('connection', (socket) => {
-        console.log('User connected:', socket.id);
+        // console.log('User connected:', socket.id);
 
         socket.on("register-user", async (username) => {
             try {
@@ -21,20 +21,20 @@ const socketHandler = (server) => {
                 );
                 console.log(`${username} registered with socket ID ${socket.id}`);
             } catch (err) {
-                console.error("❌ Error registering user:", err.message);
+                console.error("Error registering user:", err.message);
             }
         });
 
         // Fixed: Match the client-side event structure
         socket.on('send-message', async (messageData) => {
-            console.log('Received message data:', messageData);
+            // console.log('Received message data:', messageData);
             
             // Extract data from the client payload
             const { content, by, to } = messageData;
             
             // Validate required fields
             if (!content || !by || !to) {
-                console.error('❌ Missing required fields:', { content, by, to });
+                console.error('Missing required fields:', { content, by, to });
                 return;
             }
 
@@ -43,7 +43,7 @@ const socketHandler = (server) => {
                 let receiver = await userModel.findOne({ username: to });
                 
                 if (!receiver) {
-                    console.log(`⚠️ User ${to} not found in database`);
+                    console.log(`User ${to} not found in database`);
                 } else {
                     let receiver_socketId = receiver.socketid;
 
@@ -54,13 +54,13 @@ const socketHandler = (server) => {
                             by,
                             to
                         });
-                        console.log(`📤 Message from ${by} to ${to}: ${content}`);
+                        // console.log(`Message from ${by} to ${to}: ${content}`);
                     } else {
-                        console.log(`⚠️ User ${to} is not online (no socket ID)`);
+                        console.log(`User ${to} is not online (no socket ID)`);
                     }
                 }
             } catch (err) {
-                console.error("❌ Error finding receiver:", err.message);
+                console.error("Error finding receiver:", err.message);
             }
 
             // Save message to database
@@ -83,19 +83,19 @@ const socketHandler = (server) => {
                 thread.messages.push({
                     content: content,
                     by: by,
-                    timestamp: new Date() // Add timestamp
+                    timestamp: new Date()
                 });
 
                 await thread.save();
-                console.log(`💾 Message saved from ${by} to ${to}: ${content}`);
+                // console.log(`💾 Message saved from ${by} to ${to}: ${content}`);
             } catch (err) {
-                console.error("❌ Error saving message:", err.message);
+                console.error("Error saving message:", err.message);
             }
         });
 
         // Handle user disconnection
         socket.on('disconnect', async () => {
-            console.log('User disconnected:', socket.id);
+            // console.log('User disconnected:', socket.id);
             
             // Optional: Clear socket ID from user record
             try {
@@ -103,7 +103,7 @@ const socketHandler = (server) => {
                     { socketid: socket.id },
                     { $unset: { socketid: 1 } }
                 );
-                console.log(`🔌 Socket ID ${socket.id} cleared from user record`);
+                // console.log(`🔌 Socket ID ${socket.id} cleared from user record`);
             } catch (err) {
                 console.error("❌ Error clearing socket ID:", err.message);
             }

@@ -2,7 +2,6 @@ import messageModel from "../models/messages.model.js"
 
 const getChatBetweenUsers = async (req, res) => {
     const { user1, user2 } = req.params;
-    // console.log(user1,user2);
     try {
         const chat = await messageModel.findOne({
             $or: [

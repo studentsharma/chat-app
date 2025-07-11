@@ -5,7 +5,6 @@ import bcrypt from "bcrypt";
 const getFriends = async (req, res) => {
 
     const { user: username } = req.params;
-    // const username = req.params.user;
 
     try {
         let user = await userModel.findOne({ username });
@@ -37,7 +36,7 @@ const createUser = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = await userModel.create({ username, password: hashedPassword });
-        const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "10m" });
+        const token = jwt.sign({ id: newUser._id, username }, process.env.JWT_SECRET, { expiresIn: "10m" });
         res.cookie("token", token, {
             httpOnly: true,
             maxAge: 24 * 60 * 60 * 1000,
@@ -59,20 +58,15 @@ const login = async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "10m" });
+        const token = jwt.sign({ id: user._id, username }, process.env.JWT_SECRET, { expiresIn: "10m" });
 
-        // res.cookie("token", token, {
-        //     httpOnly: true,
-        //     maxAge: 10 * 60 * 1000,
-        // });
-
+        console.log(token);
         res.cookie("token", token, {
             httpOnly: true,
-            sameSite: "None",     // Use "None" if frontend/backend on different domains
-            secure: false,       // Set to true in production (HTTPS)
-            maxAge: 24 * 60 * 60 * 1000,
+            sameSite: "Lax", 
+            secure: false,       
+            maxAge: 10 * 60 * 1000,
         });
-
         res.status(200).json({ user, token });
 
     }
@@ -96,4 +90,13 @@ const getUsers = async (req, res) => {
     }
 }
 
-export { getFriends, createUser, login, getUsers };
+const logout = (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: false, 
+  });
+  res.status(200).json({ message: "Logged out successfully" });
+};
+
+
+export { getFriends, createUser, login, getUsers, logout };

@@ -1,15 +1,15 @@
 import jwt from "jsonwebtoken"
-const auth = (req, res, next) => {
+
+const authme = (req, res) => {
   const token = req.cookies.token;
   if (!token) return res.status(401).json({ user: null });
-  console.log(token)
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
-    next();
+    console.log(decoded.username);
+    res.json({ username: decoded.username });
   } catch (err) {
-    return res.status(401).json({ user: null });
+    res.status(401).json({ username: null });
   }
 };
 
-export default auth
+export default authme
