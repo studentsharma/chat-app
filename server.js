@@ -25,6 +25,7 @@ const app = express();
 app.use(cors({
   origin: [
     "https://chat-frontend-eypj.onrender.com",
+    "https://chat-frontend-tawny-nine.vercel.app/",
     "http://localhost:5173"
   ], 
   credentials: true,
